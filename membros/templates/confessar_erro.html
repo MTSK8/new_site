@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Criar Novo Membro</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    
+</head>
+<body id="body_Criar_membros" >
+
+    <h1>Criar Novo Membro</h1>
+    
+    <form method="POST">
+        {% csrf_token %} 
+        
+        
+        {% for field in form %}
+        <div>
+            {{ field.label_tag }}
+            
+            {{ field }}
+        
+            {% if field.errors %}
+            <div class="error">{{ field.errors }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        
+        <br>
+        <!-- Botões -->
+        <button type="submit" class="btn btn-save">Salvar</button>
+        <a href="{% url 'listar_membros' %}" class="btn btn-cancel">Cancelar</a>
+    </form>
+</body>
+</html>

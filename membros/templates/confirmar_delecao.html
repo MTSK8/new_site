@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+
+    <title>Confirmar Exclusão</title>
+
+</head>
+<body id="confirmar_delecao">
+    <div class="container">
+        <h1>⚠️ Confirmar Exclusão</h1>
+        
+        
+        <p class="warning">
+            Tem certeza que deseja excluir o membro 
+            <strong>{{ membro.firstname }} {{ membro.lastname }}</strong>?
+        </p>
+        
+        
+        <p><strong>Telefone:</strong> {{ membro.telefone|default:"Não informado" }}</p>
+        <p><strong>Data de Ingresso:</strong> {{ membro.data_ingresso|default:"Não informada" }}</p>
+        
+      
+        <form method="POST" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-delete"> Confirmar Exclusão</button>
+        </form>
+        
+        
+        <a href="{% url 'listar_membros' %}" class="btn btn-cancel"> Cancelar</a>
+    </div>
+
+
+    
+</body>
+</html>

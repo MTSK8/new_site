@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+
+    <title>Editar Membro</title>
+</head>
+
+<body id="body_editar_membro">
+
+    <h1>Editar Membro: {{ membro.firstname }} {{ membro.lastname }}</h1>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        {% for field in form %}
+        <div>
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+            <div class="error">{{ field.errors }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        
+        <br>
+        
+        <!-- BOTÃO ATUALIZAR -->
+        <button type="submit" class="btn btn-update"> Atualizar</button>
+        
+        <!-- BOTÃO CANCELAR -->
+        <a href="{% url 'listar_membros' %}" class="btn btn-cancel">Cancelar</a>
+    </form>
+</body>
+</html>

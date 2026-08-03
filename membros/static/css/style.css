@@ -1,0 +1,44 @@
+body { font-family: Arial, sans-serif; margin: 20px; }
+
+
+#body_Criar_membros{
+
+form { max-width: 400px; margin: 20px 0; }
+label { display: block; margin-top: 10px; font-weight: bold; }
+input { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+.btn { padding: 10px 20px; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; display: inline-block; margin-top: 10px; }
+.btn-save { background-color: #4CAF50; color: white; }
+.btn-cancel { background-color: #f44336; color: white; }}
+
+#body_editar_membro{ 
+
+
+form { max-width: 400px; margin: 20px 0; }
+label { display: block; margin-top: 10px; font-weight: bold; }
+input { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+.btn { padding: 10px 20px; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; display: inline-block; margin-top: 10px; }
+.btn-update { background-color: #2196F3; color: white; }
+.btn-cancel { background-color: #f44336; color: white; }
+.error { color: red; font-size: 14px; }}
+   
+#meu_primeiro_html{
+.alerta { padding: 15px; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
+.sucesso { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+th { background-color: #4CAF50; color: white; }
+tr:nth-child(even) { background-color: #f2f2f2; }
+btn { padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block; }
+.btn-add { background-color: #4CAF50; color: white; margin-bottom: 15px; }
+.btn-edit { background-color: #2196F3; color: white; }
+.btn-delete { background-color: #f44336; color: white;}}
+
+
+#confirmar_delecao {
+
+.container { max-width: 500px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+.warning { color: #f44336; font-size: 18px; font-weight: bold; }
+.btn { padding: 10px 20px; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; display: inline-block; margin-top: 10px;}
+.btn-delete { background-color: #f44336; color: white; }
+.btn-cancel { background-color: #808080; color: white; }}
