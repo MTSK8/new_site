@@ -7,12 +7,12 @@
     
     <link rel="stylesheet" href="{% static 'css/style.css'%}">
 
-    <title>Editar Membro</title>
+    <title>Editar Historia</title>
 </head>
 
 <body id="body_editar_membro">
 
-    <h1>Editar Membro: {{ membro.firstname }} {{ membro.lastname }}</h1>
+    <h1>Editar História: {{ form.instance.titulo }}</h1>
     
     <form method="POST">
         {% csrf_token %}
@@ -33,7 +33,7 @@
         <button type="submit" class="btn btn-update"> Atualizar</button>
         
         <!-- BOTÃO CANCELAR -->
-        <a href="{% url 'listar_membros' %}" class="btn btn-cancel">Cancelar</a>
+        <a href="{% url 'lista_historias' %}" class="btn btn-cancel">Cancelar</a>
     </form>
 </body>
 </html>

@@ -29,11 +29,12 @@ def criar_historia(request):
         if form.is_valid():
             form.save()
             messages.success(request, '🎉 Confissão publicada com sucesso!')
-            return redirect('listar_historias')
+            return redirect('lista_historias')
         
     else:
         form = HistoriaErroForm()
-        return render(request, "criar_membro.html", {"form": form})
+        
+        return render(request, "confessar_erro.html", {"form": form})
     
 def editar_historia (request, id):
     historia = get_object_or_404(HistoriaErro, id=id)
@@ -43,12 +44,12 @@ def editar_historia (request, id):
         if form.is_valid():
             form.save()
             messages.success(request, '✏️ Historia atualizado com sucesso!')
-            return redirect('listar_historias')
+            return redirect('lista_historias')
             
     else:
         form = HistoriaErroForm (instance=historia)
         
-    return render(request, "editar_membro.html", {"form": form, "historia": historia})
+    return render(request, "editar_historia.html", {"form": form, "historia": historia})
 
 def deletar_historia(request, id):
     historia = get_object_or_404 (HistoriaErro, id=id)
@@ -56,7 +57,7 @@ def deletar_historia(request, id):
     if request.method == "POST":
         historia.delete()
         messages.success(request, '🗑️ História apagada para sempre!')
-        return redirect ('listar_historias')
+        return redirect ('lista_historias')
     
     return render(request, "confirmar_delecao.html", {"historia": historia})
          
