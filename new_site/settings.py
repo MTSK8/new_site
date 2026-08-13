@@ -116,3 +116,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+#parte de login e redirecionamento, se tiver algum problema tente dar uma olhada aqui
+
+LOGIN_REDIRECT_URL = 'lista_historias'
+LOGOUT_REDIRECT_URL = 'lista_historias'
+LOGIN_URL = 'login'

@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Galeria de Erros{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <script>
+        (function() {
+            const temaSalvo = localStorage.getItem('tema') || 'dark';
+            document.documentElement.setAttribute('data-theme', temaSalvo);
+        })();
+    </script>
+</head>
+
+<body id="{% block body_id %}{% endblock %}">
+
+<div style="display:flex; justify-content: space-between; align-items:center;">
+    <div>
+        {% if user.is_authenticated %}
+            👤 Olá, <strong>{{ user.username }}</strong>!
+            <a href="{% url 'meu_perfil' %}">Meu Perfil</a>
+            <form action="{% url 'logout' %}" method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit">Sair da Conta</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Entrar</a>
+            <a href="{% url 'registro' %}">Cadastrar Conta Nova</a>
+        {% endif %}
+    </div>
+
+    <div>
+        <label for="seletor-tema" style="font-weight: normal; display:inline;">🎨 Tema:</label>
+        <select id="seletor-tema" onchange="mudarTema(this.value)">
+            <option value="dark">Escuro</option>
+            <option value="light">Claro</option>
+            <option value="navy">Azul marinho</option>
+        </select>
+    </div>
+</div>
+
+{% block conteudo %}{% endblock %}
+
+<script>
+    const seletor = document.getElementById('seletor-tema');
+    seletor.value = document.documentElement.getAttribute('data-theme');
+
+    function mudarTema(tema) {
+        document.documentElement.setAttribute('data-theme', tema);
+        localStorage.setItem('tema', tema);
+    }
+</script>
+
+<script src="{% static 'js/script.js' %}"></script>
+
+</body>
+</html>

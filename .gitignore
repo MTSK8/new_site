@@ -1,0 +1,6 @@
+rabbit/
+
+#pip freeze > requirements.txt
+#Isso gera um arquivo listando tudo o que é necessário. Quando você subir
+#esse arquivo para o GitHub, qualquer pessoa (ou você) poderá baixar o código
+#e instalar tudo de uma vez com um único comando: pip install -r requirements.txt.

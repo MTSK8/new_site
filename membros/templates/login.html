@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Login{% endblock %}
+{% block body_id %}login{% endblock %}
+
+{% block conteudo %}
+
+    <div class='container'>
+        <h2>Entrar na Conta 🔐</h2>
+        <br>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Entrar</button>
+        </form>
+
+        <div class="links">
+            <p>Não tem conta? <a href="{% url 'registro' %}"> Cadastre-se Aqui! </a>.</p>
+            <a href="{% url 'lista_historias' %}">Voltar para a página inicial</a>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,37 +1,31 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Confessar Erro</title>
-
-    <link rel="stylesheet" href="{% static 'css/style.css'%}">
-    
-</head>
-<body id="body_Criar_membros" >
-
+{% extends 'base.html' %}
+ 
+{% block titulo %}Confessar Erro{% endblock %}
+{% block body_id %}body_Criar_membros{% endblock %}
+ 
+{% block conteudo %}
+ 
     <h1>Confessar Erro</h1>
-    
+ 
     <form method="POST">
-        {% csrf_token %} 
-        
-        
+        {% csrf_token %}
+ 
         {% for field in form %}
         <div>
             {{ field.label_tag }}
-            
+ 
             {{ field }}
-        
+ 
             {% if field.errors %}
             <div class="error">{{ field.errors }}</div>
             {% endif %}
         </div>
         {% endfor %}
-        
+ 
         <br>
         <!-- Botões -->
         <button type="submit" class="btn btn-save">Salvar</button>
         <a href="{% url 'lista_historias' %}" class="btn btn-cancel"> Cancelar</a>
     </form>
-</body>
-</html>
+ 
+{% endblock %}

@@ -1,16 +1,10 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends 'base.html' %}
 
+{% block titulo %}Galeria de Erros{% endblock %}
+{% block body_id %}meu_primeiro_html{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeria de Erros</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
+{% block conteudo %}
 
-<body id="meu_primeiro_html">
     <h1>Lista de Erros</h1>
 
     {% if messages %}
@@ -21,44 +15,69 @@
             </div>
         {% endfor %}
     </div>
-{% endif %}
+    {% endif %}
 
-<a href="{% url 'criar_historia' %}" class="btn btn-add">➕ Confessar Novo Erro</a>
+    <a href="{% url 'criar_historia' %}" class="btn btn-add">➕ Confessar Novo Erro</a>
 
-    <table>
-        <thead>
-            <tr>
-                <th>id</th>
-                <th>Título</th>
-                <th>História</th>
-                <th>Vergonha</th>
-                <th>Graça</th>
-                <th>Autor</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for historia in historias %}
-            <tr>
-                <td><strong>{{ historia.titulo }}</strong></td>
-                <td>{{ historia.descricao }}</td>
-                <td>😳 {{ historia.nivel_vergonha }}/5</td>
-                <td>😂 {{ historia.nivel_graca }}/5</td>
-                <td>{{ historia.autor|default:"Anônimo" }}</td>
-               
-                <td>
-                    <a href="{% url 'editar_historia' historia.id %}" class="btn btn-edit">Editar</a>
-                    <a href="{% url 'deletar_historia' historia.id %}" class="btn btn-delete">Excluir</a>
-                </td>
+    <!--  O CONTAINER DE CARDS -->
+    <div class="infinite-container" id="lista-historias">
+        {% include 'historias_rows.html' %}
+    </div>
 
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="6" style="text-align: center;">Nenhuma história de erro cadastrada ainda. Seja o primeiro a confessar!</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div id="loading" style="text-align:center; padding: 20px; display: none;">Carregando mais histórias... 🔄</div>
+    <div id="fim-da-lista" style="text-align:center; padding: 20px; display: none; color: gray;">Você chegou ao fim das confissões 🎉</div>
 
-</body>
-</html>
+    <script>
+        let nextPage = {{ next_page|default:"null" }};
+        let hasNext = {{ has_next|yesno:"true,false" }};
+        let carregando = false;
+
+        const sentinela = document.getElementById('loading');
+        const fimDaLista = document.getElementById('fim-da-lista');
+        const tbody = document.getElementById('lista-historias');
+
+        if (!hasNext) {
+            fimDaLista.style.display = 'block';
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && hasNext && !carregando) {
+                    carregarMaisHistorias();
+                }
+            });
+        }, { rootMargin: '200px' });
+
+        if (hasNext) observer.observe(sentinela);
+
+        function carregarMaisHistorias() {
+            carregando = true;
+            sentinela.style.display = 'block';
+
+            const params = new URLSearchParams(window.location.search);
+            params.set('page', nextPage);
+
+            fetch(`{% url 'lista_historias' %}?${params.toString()}`, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                tbody.insertAdjacentHTML('beforeend', data.html);
+                hasNext = data.has_next;
+                nextPage = data.next_page;
+                sentinela.style.display = 'none';
+                carregando = false;
+
+                if (!hasNext) {
+                    observer.unobserve(sentinela);
+                    fimDaLista.style.display = 'block';
+                }
+            })
+            .catch(() => {
+                sentinela.style.display = 'none';
+                carregando = false;
+            });
+        }
+    </script>
+
+{% endblock %}

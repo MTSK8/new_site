@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Meu Perfil{% endblock %}
+{% block body_id %}perfil{% endblock %}
+
+{% block conteudo %}
+
+<div class="perfil-header" style="margin-bottom: 20px;">
+    <a href="{% url 'lista_historias' %}" class="btn btn-cancel">⬅ Voltar para o início</a>
+    <h2>👤 Perfil de {{ user.username }}</h2>
+    <p>Membro desde: {{ user.date_joined|date:"d/m/Y" }}</p>
+</div>
+
+<h3>Minhas Confissões</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th style="display: none;">id</th>
+            <th>Título</th>
+            <th>História</th>
+            <th>Vergonha</th>
+            <th>Graça</th>
+            <th>Autor</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody id="lista-historias">
+        {% include 'historias_rows.html' %}
+    </tbody>
+</table>
+
+<div id="loading" style="text-align:center; padding: 20px; display: none;">Carregando mais histórias... 🔄</div>
+<div id="fim-da-lista" style="text-align:center; padding: 20px; display: none; color: gray;">Você chegou ao fim das suas confissões 🎉</div>
+
+<script>
+    let nextPage = {{ next_page|default:"null" }};
+    let hasNext = {{ has_next|yesno:"true,false" }};
+    let carregando = false;
+
+    const sentinela = document.getElementById('loading');
+    const fimDaLista = document.getElementById('fim-da-lista');
+    const tbody = document.getElementById('lista-historias');
+
+    if (!hasNext) {
+        fimDaLista.style.display = 'block';
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && hasNext && !carregando) {
+                carregarMaisHistorias();
+            }
+        });
+    }, { rootMargin: '200px' });
+
+    if (hasNext) observer.observe(sentinela);
+
+    function carregarMaisHistorias() {
+        carregando = true;
+        sentinela.style.display = 'block';
+
+        const params = new URLSearchParams(window.location.search);
+        params.set('page', nextPage);
+
+        fetch(`{% url 'meu_perfil' %}?${params.toString()}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            tbody.insertAdjacentHTML('beforeend', data.html);
+            hasNext = data.has_next;
+            nextPage = data.next_page;
+            sentinela.style.display = 'none';
+            carregando = false;
+
+            if (!hasNext) {
+                observer.unobserve(sentinela);
+                fimDaLista.style.display = 'block';
+            }
+        })
+        .catch(() => {
+            sentinela.style.display = 'none';
+            carregando = false;
+        });
+    }
+</script>
+
+{% endblock %}

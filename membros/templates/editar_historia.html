@@ -1,22 +1,17 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link rel="stylesheet" href="{% static 'css/style.css'%}">
 
-    <title>Editar Historia</title>
-</head>
-
-<body id="body_editar_membro">
-
+Editar historia · HTML
+{% extends 'base.html' %}
+ 
+{% block titulo %}Editar História{% endblock %}
+{% block body_id %}body_editar_membro{% endblock %}
+ 
+{% block conteudo %}
+ 
     <h1>Editar História: {{ form.instance.titulo }}</h1>
-    
+ 
     <form method="POST">
         {% csrf_token %}
-        
+ 
         {% for field in form %}
         <div>
             {{ field.label_tag }}
@@ -26,14 +21,14 @@
             {% endif %}
         </div>
         {% endfor %}
-        
+ 
         <br>
-        
+ 
         <!-- BOTÃO ATUALIZAR -->
         <button type="submit" class="btn btn-update"> Atualizar</button>
-        
+ 
         <!-- BOTÃO CANCELAR -->
         <a href="{% url 'lista_historias' %}" class="btn btn-cancel">Cancelar</a>
     </form>
-</body>
-</html>
+ 
+{% endblock %}

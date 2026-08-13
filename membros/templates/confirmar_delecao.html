@@ -1,36 +1,26 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="{% static 'css/style.css'%}">
-
-    <title>Confirmar Exclusão</title>
-
-</head>
-<body id="confirmar_delecao">
+{% extends 'base.html' %}
+ 
+{% block titulo %}Confirmar Exclusão{% endblock %}
+{% block body_id %}confirmar_delecao{% endblock %}
+ 
+{% block conteudo %}
+ 
     <div class="container">
         <h1>⚠️ Confirmar Exclusão ⚠️</h1>
-        
-        
+ 
         <p class="warning">
-            "Deseja excluir a história '{{ historia.titulo }}'?" 
+            "Deseja excluir a história '{{ historia.titulo }}'?"
         </p>
-
+ 
         <p><strong>Autor:</strong> {{ historia.autor|default:"Anônimo" }}</p>
-      
+ 
         <form method="POST">
             {% csrf_token %}
             <button type="submit" class="btn btn-delete"> Confirmar Exclusão</button>
         </form>
-        
-        
+ 
         <a href="{% url 'lista_historias' %}" class="btn btn-cancel"> Cancelar</a>
     </div>
-
-
-    
-</body>
-</html>
+ 
+{% endblock %}
+ 

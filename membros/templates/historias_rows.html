@@ -1,0 +1,32 @@
+{% for historia in historias %}
+<div class="historia-card">
+    <div class="card-header">
+        <strong>{{ historia.titulo }}</strong>
+        <span class="card-autor">Por: {{ historia.autor|default:"Anônimo" }}</span>
+    </div>
+    
+    <div class="card-body">
+        <p>{{ historia.descricao }}</p>
+    </div>
+
+    <div class="card-footer">
+        <div class="card-metrics">
+            <span>😳 Vergonha: {{ historia.nivel_vergonha }}/5</span>
+            <span>😂 Graça: {{ historia.nivel_graca }}/5</span>
+        </div>
+        
+        <div class="card-actions">
+            {% if historia.criado_por.id == user.id %}
+                <a href="{% url 'editar_historia' historia.id %}" class="btn btn-edit">Editar</a>
+                <a href="{% url 'deletar_historia' historia.id %}" class="btn btn-delete">Excluir</a>
+            {% else %}
+                <span style="color: gray; font-size: 0.8em;">🔒 Sem permissão</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="historia-card vazio">
+    <p style="text-align: center;">O que temos para hoje?</p>
+</div>
+{% endfor %}

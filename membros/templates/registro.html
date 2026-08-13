@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+ 
+{% block titulo %}Cadastro{% endblock %}
+{% block body_id %}registro{% endblock %}
+ 
+{% block conteudo %}
+ 
+    <div class="container">
+        <h2>Criar Nova Conta 📝</h2>
+        <br>
+ 
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Cadastrar</button>
+        </form>
+ 
+        <div class="links">
+            <p>Já tem uma conta? <a href="{% url 'login' %}">Faça login aqui</a>.</p>
+            <a href="{% url 'lista_historias' %}">Voltar para a página inicial</a>
+        </div>
+    </div>
+ 
+{% endblock %}
