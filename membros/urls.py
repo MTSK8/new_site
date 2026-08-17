@@ -12,5 +12,5 @@ urlpatterns = [
     path('historias/criar/', views.criar_historia, name='criar_historia'),
     path('historias/editar/<int:id>/', views.editar_historia, name='editar_historia'),
     path('historias/deletar/<int:id>/', views.deletar_historia, name='deletar_historia'),
-    path('historias/<int:id>/reagir/<str:tipo>/', views.reagir_historia, name='reagir_historia'),
+    path('historia/<int:historia_id>/reagir/<str:tipo>/', views.reagir_historia, name='reagir_historia'),
 ]

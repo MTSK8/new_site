@@ -13,25 +13,13 @@
 
 <h3>Minhas Confissões</h3>
 
-<table>
-    <thead>
-        <tr>
-            <th style="display: none;">id</th>
-            <th>Título</th>
-            <th>História</th>
-            <th>Vergonha</th>
-            <th>Graça</th>
-            <th>Autor</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody id="lista-historias">
-        {% include 'historias_rows.html' %}
-    </tbody>
-</table>
+<div class="infinite-container" id="lista-historias">
+    {% include 'historias_rows.html' %}
+</div>
 
 <div id="loading" style="text-align:center; padding: 20px; display: none;">Carregando mais histórias... 🔄</div>
 <div id="fim-da-lista" style="text-align:center; padding: 20px; display: none; color: gray;">Você chegou ao fim das suas confissões 🎉</div>
+
 
 <script>
     let nextPage = {{ next_page|default:"null" }};

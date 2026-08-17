@@ -1,3 +1,4 @@
+{% load reacoes_extras %}
 {% for historia in historias %}
 <div class="historia-card">
     <div class="card-header">
@@ -11,9 +12,19 @@
 
     <div class="card-footer">
         <div class="card-metrics">
-            <span>😳 Vergonha: {{ historia.nivel_vergonha }}/5</span>
-            <span>😂 Graça: {{ historia.nivel_graca }}/5</span>
-        </div>
+    {% if historia.criado_por != user %}
+        <a href="{% url 'reagir_historia' historia.id 'graca' %}">😂 {{ historia.reacoes.all|contar_tipo:"graca" }}</a>
+        <a href="{% url 'reagir_historia' historia.id 'triste' %}">😢 {{ historia.reacoes.all|contar_tipo:"triste" }}</a>
+        <a href="{% url 'reagir_historia' historia.id 'coracao' %}">❤️ {{ historia.reacoes.all|contar_tipo:"coracao" }}</a>
+        <a href="{% url 'reagir_historia' historia.id 'raiva' %}">😡 {{ historia.reacoes.all|contar_tipo:"raiva" }}</a>
+    {% else %}
+        
+        <span>😂 {{ historia.reacoes.all|contar_tipo:"graca" }}</span>
+        <span>😢 {{ historia.reacoes.all|contar_tipo:"triste" }}</span>
+        <span>❤️ {{ historia.reacoes.all|contar_tipo:"coracao" }}</span>
+        <span>😡 {{ historia.reacoes.all|contar_tipo:"raiva" }}</span>
+    {% endif %}
+</div>
         
         <div class="card-actions">
             {% if historia.criado_por.id == user.id %}

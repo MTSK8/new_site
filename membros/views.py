@@ -113,23 +113,25 @@ def deletar_historia(request, id):
 
 
 @login_required
-def reagir_historia(request, id, tipo):
-    historia = get_object_or_404(HistoriaErro, id=id)
+def reagir_historia(request, historia_id, tipo):
+    historia = get_object_or_404(HistoriaErro, id=historia_id)
 
-   
     if historia.criado_por == request.user:
-        messages.error(request, "🚫 Você não pode reagir à sua própria história!")
-        return redirect('lista_historias')
+        return redirect(request.META.get('HTTP_REFERER', 'lista_historias'))
 
-  
-    Reacao.objects.update_or_create(
-        historia=historia,
-        usuario=request.user,
-        defaults={'tipo': tipo}
-    )
+    reacao = Reacao.objects.filter(historia=historia, usuario=request.user).first()
 
-    messages.success(request, "Reação registrada com sucesso!")
-    return redirect('lista_historias')
+    if reacao:
+        if reacao.tipo == tipo:
+            reacao.delete()  
+        else:
+            reacao.tipo = tipo  
+            reacao.save()
+    else:
+        Reacao.objects.create(historia=historia, usuario=request.user, tipo=tipo)
+
+    return redirect(request.META.get('HTTP_REFERER', 'lista_historias'))
+
 
 def registrar_usuario(request):
     if request.method == 'POST':

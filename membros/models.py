@@ -13,8 +13,8 @@ class HistoriaErro(models.Model):
 
     titulo = models.CharField(max_length=150)
     descricao = models.TextField()
-    nivel_vergonha = models.IntegerField(choices=NOTAS_CHOICES)
-    nivel_graca = models.IntegerField(choices=NOTAS_CHOICES)
+    nivel_vergonha = models.IntegerField(choices=NOTAS_CHOICES, null=True, blank=True)
+    nivel_graca = models.IntegerField(choices=NOTAS_CHOICES, null=True, blank=True)
     autor = models.CharField(max_length=100, blank=True, null=True)
     
     
@@ -28,8 +28,10 @@ class HistoriaErro(models.Model):
     
 class Reacao(models.Model):
     TIPOS = [
-        ('graca', '😂 Engraçado'),
-        ('vergonha', '😳 Vergonha'),
+       ('graca', '😂'),
+        ('triste', '😢'),
+        ('coracao', '❤️'),
+        ('raiva', '😡'),
     ]
         
     historia = models.ForeignKey(HistoriaErro, on_delete=models.CASCADE, related_name='reacoes')

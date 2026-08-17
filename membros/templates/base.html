@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block titulo %}Galeria de Erros{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
     <script>
         (function() {
             const temaSalvo = localStorage.getItem('tema') || 'dark';
@@ -14,47 +15,98 @@
         })();
     </script>
 </head>
-
+ 
 <body id="{% block body_id %}{% endblock %}">
-
-<div style="display:flex; justify-content: space-between; align-items:center;">
-    <div>
+ 
+<nav id="sidebar">
+    <div id="sidebar_content">
+        <div id="user">
+            <div id="user_avatar"><i class="fa-solid fa-circle-user"></i></div>
+            <p id="user_infos">
+                {% if user.is_authenticated %}
+                    <span class="item-description">{{ user.username }}</span>
+                    <span class="item-description">Bem-vindo(a)</span>
+                {% else %}
+                    <span class="item-description">Visitante</span>
+                    <span class="item-description">Não conectado</span>
+                {% endif %}
+            </p>
+        </div>
+ 
+        <ul id="side_items">
+            <li>
+                <a href="{% url 'lista_historias' %}" class="side-item {% if request.resolver_match.url_name == 'lista_historias' %}active{% endif %}">
+                    <i class="fa-solid fa-house"></i>
+                    <span class="item-description">Início</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'criar_historia' %}" class="side-item {% if request.resolver_match.url_name == 'criar_historia' %}active{% endif %}">
+                    <i class="fa-solid fa-plus"></i>
+                    <span class="item-description">Confessar Erro</span>
+                </a>
+            </li>
+            {% if user.is_authenticated %}
+            <li>
+                <a href="{% url 'meu_perfil' %}" class="side-item {% if request.resolver_match.url_name == 'meu_perfil' %}active{% endif %}">
+                    <i class="fa-solid fa-user"></i>
+                    <span class="item-description">Meu Perfil</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+ 
+    <div id="sidebar_footer">
+        <div id="tema_seletor_sidebar">
+            <i class="fa-solid fa-palette"></i>
+            <select id="seletor-tema" onchange="mudarTema(this.value)">
+                <option value="dark">Escuro</option>
+                <option value="light">Claro</option>
+                <option value="navy">Azul marinho</option>
+            </select>
+        </div>
+ 
         {% if user.is_authenticated %}
-            👤 Olá, <strong>{{ user.username }}</strong>!
-            <a href="{% url 'meu_perfil' %}">Meu Perfil</a>
-            <form action="{% url 'logout' %}" method="POST" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit">Sair da Conta</button>
-            </form>
+        <form action="{% url 'logout' %}" method="POST" id="logout_form">
+            {% csrf_token %}
+            <button type="submit" class="side-item">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span class="item-description">Sair</span>
+            </button>
+        </form>
         {% else %}
-            <a href="{% url 'login' %}">Entrar</a>
-            <a href="{% url 'registro' %}">Cadastrar Conta Nova</a>
+        <a href="{% url 'login' %}" class="side-item">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span class="item-description">Entrar</span>
+        </a>
+        <a href="{% url 'registro' %}" class="side-item">
+            <i class="fa-solid fa-user-plus"></i>
+            <span class="item-description">Cadastrar</span>
+        </a>
         {% endif %}
     </div>
-
-    <div>
-        <label for="seletor-tema" style="font-weight: normal; display:inline;">🎨 Tema:</label>
-        <select id="seletor-tema" onchange="mudarTema(this.value)">
-            <option value="dark">Escuro</option>
-            <option value="light">Claro</option>
-            <option value="navy">Azul marinho</option>
-        </select>
-    </div>
-</div>
-
+ 
+    <button id="open_btn"><i class="fa-solid fa-angle-right"></i></button>
+</nav>
+ 
+<main>
 {% block conteudo %}{% endblock %}
-
+</main>
+ 
 <script>
     const seletor = document.getElementById('seletor-tema');
     seletor.value = document.documentElement.getAttribute('data-theme');
-
+ 
     function mudarTema(tema) {
         document.documentElement.setAttribute('data-theme', tema);
         localStorage.setItem('tema', tema);
     }
+ 
+    document.getElementById('open_btn').addEventListener('click', function () {
+        document.getElementById('sidebar').classList.toggle('open-sidebar');
+    });
 </script>
-
-<script src="{% static 'js/script.js' %}"></script>
-
+ 
 </body>
 </html>

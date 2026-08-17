@@ -4,7 +4,7 @@ from .models import HistoriaErro
 class HistoriaErroForm(forms.ModelForm):
     class Meta:
         model = HistoriaErro
-        fields = ['titulo', 'descricao', 'nivel_vergonha', 'nivel_graca', 'autor']
+        fields = ['titulo', 'descricao', 'autor']
         
         # A propriedade widgets permite customizar como as caixas de texto vão aparecer no HTML
         widgets = {

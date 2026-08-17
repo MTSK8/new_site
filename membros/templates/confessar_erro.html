@@ -5,7 +5,7 @@
  
 {% block conteudo %}
  
-    <h1>Confessar Erro</h1>
+    <h1>Desabafe seu Mico</h1>
  
     <form method="POST">
         {% csrf_token %}
@@ -24,7 +24,7 @@
  
         <br>
         <!-- Botões -->
-        <button type="submit" class="btn btn-save">Salvar</button>
+        <button type="submit" class="btn btn-save">Confessar!</button>
         <a href="{% url 'lista_historias' %}" class="btn btn-cancel"> Cancelar</a>
     </form>
  
