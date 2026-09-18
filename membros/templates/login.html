@@ -12,13 +12,16 @@
         <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Entrar</button>
+            <button type="submit" class="btn-primary">Entrar</button>
         </form>
 
         <div class="links">
             <p>Não tem conta? <a href="{% url 'registro' %}"> Cadastre-se Aqui! </a>.</p>
-            <a href="{% url 'lista_historias' %}">Voltar para a página inicial</a>
+            <p><a href="{% url 'password_reset' %}">Esqueceu sua senha?</a></p>
+            <a href="{% url 'lista_historias' %}">Voltar para a página inicial </a>
         </div>
     </div>
+
+{% block mascote %}{% include 'mascote.html' %}{% endblock %}
 
 {% endblock %}

@@ -40,3 +40,18 @@ class Reacao(models.Model):
         
     class Meta:
         unique_together = ('historia', 'usuario')
+        
+        
+class Perfil(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil')
+    foto = models.ImageField(upload_to='fotos_perfil/', null=True, blank=True)
+
+    def __str__(self):
+        return f"Perfil de {self.usuario.username}"
+    
+class CadastroPorIP(models.Model):
+    ip = models.GenericIPAddressField()
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.ip} em {self.criado_em:%d/%m/%Y %H:%M}"

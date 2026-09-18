@@ -4,8 +4,6 @@ from django.contrib.auth.views import LoginView
 
 from django.contrib.messages.views import SuccessMessageMixin
 
-from django.contrib.auth.forms import UserCreationForm
-
 from django.contrib.auth import login
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -14,9 +12,9 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
 
-from .forms import HistoriaErroForm
+from .forms import HistoriaErroForm, PerfilForm, CadastroForm
 
-from .models import HistoriaErro, Reacao
+from .models import HistoriaErro, Reacao, Perfil, CadastroPorIP
 
 from django.core.paginator import Paginator
 from django.template.loader import render_to_string
@@ -133,17 +131,35 @@ def reagir_historia(request, historia_id, tipo):
     return redirect(request.META.get('HTTP_REFERER', 'lista_historias'))
 
 
+LIMITE_CADASTROS_POR_IP = 2
+
+
+def get_client_ip(request):
+    # Sem proxy reverso configurado ainda — REMOTE_ADDR é confiável aqui.
+    # Se um dia isso ficar atrás de Nginx/Gunicorn, revisamos pra usar o
+    # cabeçalho X-Forwarded-For (só se o proxy garantir que ele não pode
+    # ser falsificado pelo próprio visitante).
+    return request.META.get('REMOTE_ADDR')
+
+
 def registrar_usuario(request):
+    ip = get_client_ip(request)
+
+    if CadastroPorIP.objects.filter(ip=ip).count() >= LIMITE_CADASTROS_POR_IP:
+        messages.error(request, '🚫 Limite de contas criadas a partir deste endereço foi atingido.')
+        return redirect('login')
+
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CadastroForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            CadastroPorIP.objects.create(ip=ip)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             messages.success(request, f"Bem-Vindo(a), {user.username}! Conta criada com sucesso.")
             return redirect('lista_historias')
     else:
-        form = UserCreationForm()
-            
+        form = CadastroForm()
+
     return render(request, 'registro.html', {'form': form})
 
 class CustomLoginView(SuccessMessageMixin, LoginView):
@@ -176,5 +192,18 @@ def meu_perfil(request):
         'next_page': page_obj.next_page_number() if page_obj.has_next() else None,
     })
     
+@login_required
+def editar_perfil(request):
+    perfil, criado = Perfil.objects.get_or_create(usuario=request.user)
 
+    if request.method == "POST":
+        form = PerfilForm(request.POST, request.FILES, instance=perfil)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '📸 Foto de perfil atualizada!')
+            return redirect('meu_perfil')
+    else:
+        form = PerfilForm(instance=perfil)
+
+    return render(request, 'editar_perfil.html', {'form': form})
             

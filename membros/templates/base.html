@@ -21,7 +21,14 @@
 <nav id="sidebar">
     <div id="sidebar_content">
         <div id="user">
-            <div id="user_avatar"><i class="fa-solid fa-circle-user"></i></div>
+            <div id="user_avatar">
+                {% if user.is_authenticated and user.perfil.foto %}
+                    <img src="{{ user.perfil.foto.url }}" alt="Foto de perfil">
+                {% else %}
+                    <i class="fa-solid fa-circle-user"></i>
+                {% endif %}
+            </div>
+            
             <p id="user_infos">
                 {% if user.is_authenticated %}
                     <span class="item-description">{{ user.username }}</span>
@@ -93,6 +100,8 @@
 <main>
 {% block conteudo %}{% endblock %}
 </main>
+
+{% block mascote %}{% endblock %}
  
 <script>
     const seletor = document.getElementById('seletor-tema');
@@ -106,6 +115,43 @@
     document.getElementById('open_btn').addEventListener('click', function () {
         document.getElementById('sidebar').classList.toggle('open-sidebar');
     });
+
+    // aqui e onde fica a parte do pet
+document.addEventListener('mousemove', function (e) {
+    document.querySelectorAll('.mascote-olho').forEach(function (olho) {
+        const pupila = olho.querySelector('.mascote-pupila');
+        const rect = olho.getBoundingClientRect();
+        const centroX = rect.left + rect.width / 2;
+        const centroY = rect.top + rect.height / 2;
+        const angulo = Math.atan2(e.clientY - centroY, e.clientX - centroX);
+        const distancia = 5;
+        pupila.style.transform = `translate(${Math.cos(angulo) * distancia}px, ${Math.sin(angulo) * distancia}px)`;
+    });
+});
+
+document.querySelectorAll('input[type="password"]').forEach(function (input) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'campo-senha';
+    input.parentNode.insertBefore(wrapper, input);
+    wrapper.appendChild(input);
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'toggle-senha';
+    btn.setAttribute('aria-label', 'Mostrar senha');
+    btn.innerHTML = '<i class="fa-solid fa-eye"></i>';
+    wrapper.appendChild(btn);
+
+    btn.addEventListener('click', function () {
+        const mostrando = input.type === 'text';
+        input.type = mostrando ? 'password' : 'text';
+        btn.innerHTML = mostrando
+            ? '<i class="fa-solid fa-eye"></i>'
+            : '<i class="fa-solid fa-eye-slash"></i>';
+        btn.setAttribute('aria-label', mostrando ? 'Mostrar senha' : 'Ocultar senha');
+    });
+});
+
 </script>
  
 </body>

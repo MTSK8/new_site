@@ -7,6 +7,7 @@
 
 <div class="perfil-header" style="margin-bottom: 20px;">
     <a href="{% url 'lista_historias' %}" class="btn btn-cancel">⬅ Voltar para o início</a>
+    <a href="{% url 'editar_perfil' %}" class="btn btn-edit">📸 Editar Foto</a>
     <h2>👤 Perfil de {{ user.username }}</h2>
     <p>Membro desde: {{ user.date_joined|date:"d/m/Y" }}</p>
 </div>

@@ -100,6 +100,13 @@ main {
     color: var(--cor-destaque);
     background-color: var(--cor-fundo);
 }
+
+#user_avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+}
  
 #user_infos {
     display: flex;
@@ -273,6 +280,8 @@ input, select, textarea {
     padding: 8px;
     box-sizing: border-box;
 }
+
+
  
  
 #confirmar_delecao {
@@ -282,6 +291,65 @@ input, select, textarea {
 .btn { padding: 10px 20px; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; display: inline-block; margin-top: 10px;}
 .btn-delete { background-color: #f44336; color: white; }
 .btn-cancel { background-color: #808080; color: white; }}
+
+/* ===== Mascote ===== */
+
+#mascote {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999;
+    pointer-events: none;
+    animation: mascote-flutuar 3s ease-in-out infinite;
+}
+
+.mascote-corpo {
+    width: 90px;
+    height: 80px;
+    background-color: var(--cor-destaque);
+    border-radius: 50% 50% 45% 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+}
+
+.mascote-olho {
+    width: 26px;
+    height: 26px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: mascote-piscar 5s infinite;
+}
+
+.mascote-pupila {
+    width: 12px;
+    height: 12px;
+    background-color: #222;
+    border-radius: 50%;
+    transition: transform 0.05s linear;
+}
+
+.mascote-boca {
+    width: 22px;
+    height: 11px;
+    border-radius: 0 0 20px 20px;
+    background-color: #222;
+    margin: 6px auto 0;
+}
+
+@keyframes mascote-flutuar {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes mascote-piscar {
+    0%, 96%, 100% { transform: scaleY(1); }
+    98% { transform: scaleY(0.1); }
+}
  
 #loading {
     font-size: 14px;
@@ -378,4 +446,164 @@ input, select, textarea {
 
 .card-metrics a:hover {
     color: var(--cor-texto);
+}
+
+/* ===================================================
+   Aqui tem a parte bonita das telas de Autenticação (Login / Cadastro / Recuperar Senha)
+   =================================================== */
+
+/* essa pequena parte centraliza o card na área útil (o espaço que sobra ao lado da sidebar) */
+body#login main,
+body#registro main,
+body#password_reset main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* O "card" do formulário */
+body#login .container,
+body#registro .container,
+body#password_reset .container {
+    background-color: var(--cor-fundo-card);
+    border: 1px solid var(--cor-borda);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    padding: 32px 36px;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+body#login .container h2,
+body#registro .container h2,
+body#password_reset .container h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-family: 'Poppins', sans-serif;
+}
+
+body#password_reset .container p {
+    color: var(--cor-texto-secundario);
+    font-size: 14px;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+/* Espaçamento entre os campos que o form.as_p gera */
+body#login form p,
+body#registro form p,
+body#password_reset form p {
+    margin: 0 0 16px;
+}
+
+body#login form label,
+body#registro form label,
+body#password_reset form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--cor-texto-secundario);
+}
+
+body#login form input,
+body#registro form input,
+body#password_reset form input {
+    width: 100%;
+}
+
+/* Texto de ajuda do Django (ex: regras de senha) */
+body#login form .helptext,
+body#registro form .helptext,
+body#password_reset form .helptext {
+    display: block;
+    font-size: 12px;
+    color: var(--cor-texto-secundario);
+    margin-top: 4px;
+}
+
+body#registro form ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+    font-size: 12px;
+    color: var(--cor-texto-secundario);
+}
+
+body#registro form ul li {
+    margin-bottom: 2px;
+}
+
+/* Erros de validação do Django */
+body#login form .errorlist,
+body#registro form .errorlist,
+body#password_reset form .errorlist {
+    list-style: none;
+    margin: 0 0 6px;
+    padding: 0;
+    color: #f44336;
+    font-size: 13px;
+}
+
+/* Wrapper que o JS cria em volta de todo input[type=password],
+   pra encaixar o botão de mostrar/ocultar dentro do campo */
+.campo-senha {
+    position: relative;
+}
+
+.campo-senha input {
+    padding-right: 40px;
+}
+
+.toggle-senha {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--cor-texto-secundario);
+    font-size: 16px;
+    padding: 4px;
+    line-height: 1;
+}
+
+.toggle-senha:hover {
+    color: var(--cor-texto);
+}
+
+/* Botão principal, reaproveitado nas 3 telas */
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--cor-destaque);
+    color: var(--cor-destaque-texto);
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.2s ease;
+}
+
+.btn-primary:hover {
+    opacity: 0.85;
+}
+
+body#login .links,
+body#registro .links,
+body#password_reset .links {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--cor-texto-secundario);
+}
+
+body#login .links p,
+body#registro .links p,
+body#password_reset .links p {
+    margin: 8px 0;
 }
